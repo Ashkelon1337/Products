@@ -1,12 +1,16 @@
-
+from datetime import datetime
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.types import String, Integer
+from sqlalchemy.types import String, Integer, DateTime
+from sqlalchemy import func
+import os
 from fastapi import Depends
 
 from typing import Annotated
 
-url = 'postgresql+asyncpg://postgres:postgres@localhost:5432/products'
+url = os.getenv('DATABASE_URL',
+                'postgresql+asyncpg://postgres:postgres@localhost:5432/products'
+)
 
 engine = create_async_engine(url=url)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
@@ -26,4 +30,3 @@ class Products(Base):
     name: Mapped[str] = mapped_column(String(625))
     price: Mapped[int] = mapped_column(Integer)
     quantity: Mapped[int] = mapped_column(Integer)
-

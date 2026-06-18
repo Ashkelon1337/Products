@@ -9,7 +9,7 @@ from schemas import CreateProduct, ProductResponse
 async def get_product_or_404(session, product_id):
     product = await services.get_product(session, product_id)
     if not product:
-        raise HTTPException(status_code=404, detail='Product not founded')
+        raise HTTPException(status_code=404, detail='Product not found')
     return product
 
 @asynccontextmanager
@@ -53,6 +53,7 @@ async def update_product(session: SessionDep, product_id: int, product_data: Cre
     await get_product_or_404(session, product_id)
     product = await services.update_product(session, product_data, product_id)
     await invalidate_cache()
+    await invalidate_cache(f'products:{product_id}')
     await set_cached_product(product, 60)
     return product
 

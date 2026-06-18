@@ -16,12 +16,12 @@ async def get_cached_product_by_id(product_id):
 async def set_cached_products(products_data_sqlalchemy: list, ttl: int = 10):
     products_data_pydantic = [ProductResponse.model_validate(product, from_attributes=True) for product in products_data_sqlalchemy]
     products_data_dict = [product.model_dump() for product in products_data_pydantic]
-    await redis_client.setex('products:all', ttl, json.dumps(products_data_dict))
+    await redis_client.set('products:all', json.dumps(products_data_dict), ex=ttl)
 
 async def set_cached_product(product_data_sqlalchemy: Products, ttl: int = 10):
     product_data_pydantic = ProductResponse.model_validate(product_data_sqlalchemy, from_attributes=True)
     product_data_dict = product_data_pydantic.model_dump()
-    await redis_client.setex(f'products:{product_data_dict['id']}', ttl, json.dumps(product_data_dict))
+    await redis_client.set(f'products:{product_data_dict["id"]}', json.dumps(product_data_dict), ex=ttl)
 
 
 async def invalidate_cache(name:str = 'products:all'):
