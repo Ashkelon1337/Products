@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from typing import List
+
 from fastapi import FastAPI, HTTPException
 from redis_client import get_cache, set_cached_products, invalidate_cache, get_cached_product_by_id, set_cached_product
 from db import engine, Base, SessionDep

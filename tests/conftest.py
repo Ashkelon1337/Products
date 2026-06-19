@@ -1,9 +1,6 @@
 import pytest
 import os
-
 os.environ['DATABASE_URL'] = 'postgresql+asyncpg://postgres:postgres@localhost:5433/test_products'
-
-
 from httpx import AsyncClient, ASGITransport
 from main import app
 from db import engine, Base

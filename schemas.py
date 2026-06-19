@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 class CreateProduct(BaseModel):
     name: str
     price: int
@@ -9,3 +10,4 @@ class ProductResponse(BaseModel):
     name: str
     price: int
     quantity: int
+    created_at: datetime
